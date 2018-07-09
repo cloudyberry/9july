@@ -6,7 +6,7 @@ import { HTTP } from 'meteor/http'
 
 import './main.html';
 
-Template.hello.onRendered( () => {
+Template.login.onRendered( () => {
   console.log(Router.current().params.query);
   console.log(Router.current().params.query["openid.identity"])
 
@@ -16,7 +16,7 @@ Template.hello.onRendered( () => {
 });
 
 
-Template.hello.events({
+Template.login.events({
   'click button'(event, instance) {
 
 
@@ -58,12 +58,50 @@ Template.hello.events({
       console.log("error")
     }
 	Session.set('userId', (Router.current().params.query["openid.ax.value.fullname"]));
-  }
+},
+
+  'click button'(event, instance) {
+		var fullname = (Router.current().params.query["openid.ax.value.fullname"]);
+		var email = (Router.current().params.query["openid.ax.value.contact_email"]);
+
+		Accounts.createUser({
+						fullname: fullname,
+						email: email,
+
+						profile: {
+				likeScore: 0,
+				commentScore: 0,
+				dislikeScore: 0,
+				voted: [],
+			}
+		});
+	}
 });
 
-Template.test.helpers({
+Template.login.helpers({
   testing: function() {
   var fullname = (Router.current().params.query["openid.ax.value.fullname"]);
     return fullname;
-  }
+  },
+
+	loggedIn: function() {
+		  var fullname = (Router.current().params.query["openid.ax.value.fullname"]);
+			if (fullname != null) {
+				return true;
+			}
+	}
 });
+
+// Tracker.autorun(function(){
+// 	if (loggedIn) {
+// 		Router.go("/reviews");
+// 	}
+// });
+
+Template.login.rendered = function() {
+	$("#login-link").addClass('selected');
+	$("#profile-link").removeClass('selected');
+	$("#rankings-link").removeClass('selected');
+	$("#search-link").removeClass('selected');
+	$("#reviews-link").removeClass('selected');
+}

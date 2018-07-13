@@ -25,3 +25,6 @@ dynamic-import
 switch:accounts-oidc
 http
 iron:router
+session
+accounts-base
+accounts-password

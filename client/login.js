@@ -3,12 +3,20 @@ import { OAuth } from 'meteor/oauth'
 import { Meteor } from 'meteor/meteor'
 import { Random } from 'meteor/random'
 import { HTTP } from 'meteor/http'
+import { Session } from 'meteor/session';
+// import { Usernames } from '../lib/collections.js'
 
 import './main.html';
+if(Meteor.isClient) {
+
 
 Template.login.onRendered( () => {
+	Session.set('name', (Router.current().params.query["openid.ax.value.fullname"])),
+ console.log(Session.get('name'));
+console.log(Session.equals('name', (Router.current().params.query["openid.ax.value.fullname"])));
   console.log(Router.current().params.query);
   console.log(Router.current().params.query["openid.identity"])
+
 
   // store identity in a session or persistant storage such as mongoDB?
   //Router.current().params.query["openid.identity"]
@@ -47,49 +55,61 @@ Template.login.events({
         loginService: 'nus',
         loginStyle: "redirect",
         loginUrl: loginUrl,
+
         credentialRequestCompleteCallback: function(data)
         {
           console.log(data)
         },
         credentialToken: Random.secret()
+
       });
 
     } catch (e) {
       console.log("error")
     }
-	Session.set('userId', (Router.current().params.query["openid.ax.value.fullname"]));
+
+
+
+	// var fullname = (Router.current().params.query["openid.ax.value.fullname"]);
+	// var email = (Router.current().params.query["openid.ax.value.contact_email"]);
+	//
+	// Meteor.call('Usernames.insert', fullname, email);
 },
 
-  'click button'(event, instance) {
-		var fullname = (Router.current().params.query["openid.ax.value.fullname"]);
-		var email = (Router.current().params.query["openid.ax.value.contact_email"]);
-
-		Accounts.createUser({
-						fullname: fullname,
-						email: email,
-
-						profile: {
-				likeScore: 0,
-				commentScore: 0,
-				dislikeScore: 0,
-				voted: [],
-			}
-		});
-	}
+   //  'click button': function(event) {
+ 	 // 	var fullname = (Router.current().params.query["openid.ax.value.fullname"]);
+ 	 // 	var email = (Router.current().params.query["openid.ax.value.contact_email"]);
+	 //
+ 	 // 	Accounts.createUser({
+ 	 // 					fullname: fullname,
+ 	 // 					email: email,
+	 //
+ 	 // 					profile: {
+ 	 // 			likeScore: 0,
+ 	 // 			commentScore: 0,
+ 	 // 			dislikeScore: 0,
+ 	 // 			voted: [],
+ 	 // 		}
+ 	 // 	});
+ 	 // }
 });
 
 Template.login.helpers({
   testing: function() {
-  var fullname = (Router.current().params.query["openid.ax.value.fullname"]);
-    return fullname;
+  //var fullname = (Router.current().params.query["openid.ax.value.fullname"]);
+  //  return fullname;
+ return Session.get('name');
   },
 
 	loggedIn: function() {
-		  var fullname = (Router.current().params.query["openid.ax.value.fullname"]);
-			if (fullname != null) {
-				return true;
+		 //  var fullname = (Router.current().params.query["openid.ax.value.fullname"]);
+		//	  if (fullname != null) {
+		if (Session.get('name')!= null) {
+			  	return true;
+		//	return Session.equals('userId', (Router.current().params.query["openid.ax.value.fullname"]));
 			}
-	}
+		}
+
 });
 
 // Tracker.autorun(function(){
@@ -98,10 +118,11 @@ Template.login.helpers({
 // 	}
 // });
 
-Template.login.rendered = function() {
-	$("#login-link").addClass('selected');
-	$("#profile-link").removeClass('selected');
-	$("#rankings-link").removeClass('selected');
-	$("#search-link").removeClass('selected');
-	$("#reviews-link").removeClass('selected');
+// Template.login.rendered = function() {
+// 	$("#login-link").addClass('selected');
+// 	$("#profile-link").removeClass('selected');
+// 	$("#rankings-link").removeClass('selected');
+// 	$("#search-link").removeClass('selected');
+// 	$("#reviews-link").removeClass('selected');
+// }
 }

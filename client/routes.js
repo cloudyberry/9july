@@ -1,4 +1,6 @@
-
+// Router.route('/', function () {
+//   this.render('hello');
+// });
 
 
   // Router.route('/', function () {
@@ -20,6 +22,12 @@ Router.map(function(){
 		path: '/',
 		template: 'login'
 	});
+
+  this.route('reviews', {
+  path: '/reviews',
+  template: 'reviews'
+});
+
 });
   //
 	// // Signup
@@ -29,22 +37,22 @@ Router.map(function(){
 	// });
   //
 	// // Profile
-	// this.route('profile', {
-	// 	path: '/profile',
-	// 	template: 'profile'
-	// });
+	 this.route('profile', {
+		path: '/profile',
+ 	template: 'profile'
+	 });
   //
 	// // Rankings
-	// this.route('rankings', {
-	// 	path: '/rankings',
-	// 	template: 'rankings'
-	// });
+	 this.route('rankings', {
+ 	path: '/rankings',
+	 	template: 'rankings'
+	 });
   //
 	// // Search
-	// this.route('search', {
-	// 	path: '/search',
-	// 	template: 'search'
-	// });
+	 this.route('search', {
+	 	path: '/search',
+	 	template: 'search'
+	 });
   //
 	// this.route('approved', {
 	// 	path: '/approved',
